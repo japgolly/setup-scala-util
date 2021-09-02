@@ -14,13 +14,14 @@ runs:
         echo "$(pwd)/$d" >> "$GITHUB_PATH"
 
         f=$d/sbt-const
-        echo <<EOB > $f
+        echo "Creating $f"
+        echo '
           #!/bin/bash
           set -euo pipefail
           [ $# -ne 1 ] && echo "Usage: $0 <field name>" && exit 1
-          exec find . -type f \( -name '*.sbt' -o -path '**/project/*.scala' \) \
+          exec find . -type f \( -name '"'"'*.sbt'"'"' -o -path '"'"'**/project/*.scala'"'"' \) \
             -exec egrep -h "^[ \t]*(val|def)[ \t]+$1[ \t]+=[ \t]*\"([^\"]*)\"[ \t]*(/[/*].*)?$" {} + \
             | head -1 \
-            | sed 's/^.*"\(.*\)".*$/\1/'
-        EOB
+            | sed '"'"'s/^.*"\(.*\)".*$/\1/'"'"'
+        ' > $f
         chmod 755 $f

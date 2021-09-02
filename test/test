@@ -2,15 +2,23 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
+# Log utility contents
+echo "::group::sbt-const"
+f="$(which sbt-const)"
+echo "> cat $f"
+cat "$f"
+echo
+echo "::endgroup::"
+
 function test-sbt-const {
   echo "test-sbt-const $*"
-  pushd "$1"
+  pushd "$1" >/dev/null
   result="$(sbt-const "$2")"
   if [ "$result" != "$3" ]; then
     echo "  Failed: [$result]"
     exit 2
   fi
-  popd
+  popd >/dev/null
 }
 
 test-sbt-const eg1 scala2 2.13.6
