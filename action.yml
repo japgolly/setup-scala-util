@@ -25,3 +25,16 @@ runs:
             | sed '"'"'s/^.*"\(.*\)".*$/\1/'"'"'
         ' > $f
         chmod 755 $f
+
+        f=$d/sbt++field
+        echo "Creating $f"
+        echo '
+          #!/bin/bash
+          set -euo pipefail
+          [ $# -eq 0 ] && echo "Usage: $0 <field name> [args...]" && exit 1
+          v="$(sbt-const "$1")"
+          shift
+          echo "Starting sbt with Scala $v ..."
+          exec sbt "++$v" "$@"
+        ' > $f
+        chmod 755 $f

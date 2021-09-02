@@ -5,17 +5,25 @@ A GitHub Action to add Scala utilities to the PATH.
 Utilities
 =========
 
+* `sbt++field` - Start sbt with the Scala version described by an sbt build field.
+
+  ```sh
+  > grep -h 'val scala.*=' project/*.scala
+      val scala2          = "2.13.6"
+      val scala3          = "3.0.2"
+
+  > sbt++field scala2 test
+  # Runs sbt ++2.13.6 test
+  ```
+
 * `sbt-const` - Extract the string literal from a `val` or `def` field in your sbt build.
 
   Example:
 
   ```sh
-  > grep 'val scala.*=' project/*.scala
-  project/Dependencies.scala:    val scala2          = "2.13.6"
-  project/Dependencies.scala:    val scala3          = "3.0.2"
-  project/Dependencies.scala:    val scalaJsDom      = "1.2.0"
-  project/Dependencies.scala:    val scalaJsReact    = "2.0.0-RC2"
-  project/Dependencies.scala:    val scalaJsJavaTime = "1.0.0"
+  > grep -h 'val scala.*=' project/*.scala
+      val scala2          = "2.13.6"
+      val scala3          = "3.0.2"
 
   > sbt-const scala2
   2.13.6

@@ -3,12 +3,14 @@ set -euo pipefail
 cd "$(dirname "$0")"
 
 # Log utility contents
-echo "::group::sbt-const"
-f="$(which sbt-const)"
-echo "> cat $f"
-cat "$f"
-echo
-echo "::endgroup::"
+for f in sbt-const sbt++field; do
+  echo "::group::$f"
+  f2="$(which "$f")"
+  echo "> cat $f2"
+  cat "$f2"
+  echo
+  echo "::endgroup::"
+done
 
 function test-sbt-const {
   echo "test-sbt-const $*"
