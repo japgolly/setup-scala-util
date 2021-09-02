@@ -1,0 +1,26 @@
+name: 'setup-scala-util'
+description: 'GitHub Action to add Scala utilities to the PATH'
+author: 'David Barri (@japgolly)'
+
+runs:
+  using: 'composite'
+  steps:
+
+    - name: Setup Java and Scala
+      shell: bash
+      run: |
+        d=.scala-util
+        mkdir -p $d
+        echo "$(pwd)/$d" >> "$GITHUB_PATH"
+
+        f=$d/sbt-const
+        echo <<EOB > $f
+          #!/bin/bash
+          set -euo pipefail
+          [ $# -ne 1 ] && echo "Usage: $0 <field name>" && exit 1
+          exec find . -type f \( -name '*.sbt' -o -path '**/project/*.scala' \) \
+            -exec egrep -h "^[ \t]*(val|def)[ \t]+$1[ \t]+=[ \t]*\"([^\"]*)\"[ \t]*(/[/*].*)?$" {} + \
+            | head -1 \
+            | sed 's/^.*"\(.*\)".*$/\1/'
+        EOB
+        chmod 755 $f

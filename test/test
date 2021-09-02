@@ -1,0 +1,17 @@
+#!/bin/bash
+set -euo pipefail
+cd "$(dirname "$0")"
+
+function test-sbt-const {
+  echo "test-sbt-const $*"
+  pushd "$1"
+  result="$(sbt-const "$2")"
+  if [ "$result" != "$3" ]; then
+    echo "  Failed: [$result]"
+    exit 2
+  fi
+  popd
+}
+
+test-sbt-const eg1 scala2 2.13.6
+test-sbt-const eg1 scala3 3.0.2
